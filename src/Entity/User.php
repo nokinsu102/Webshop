@@ -24,43 +24,48 @@ class User extends BaseUser
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Invoice", mappedBy="user")
      */
-    private $user_id;
+    private $invoices;
 
     public function __construct()
     {
         parent::__construct();
-        $this->user_id = new ArrayCollection();
+        $this->invoices = new ArrayCollection();
         // your own logic
     }
 
     /**
      * @return Collection|Invoice[]
      */
-    public function getUserId(): Collection
+    public function getInvoices(): Collection
     {
-        return $this->user_id;
+        return $this->invoices;
     }
 
-    public function addUserId(Invoice $userId): self
+    public function addInvoice(Invoice $invoice): self
     {
-        if (!$this->user_id->contains($userId)) {
-            $this->user_id[] = $userId;
-            $userId->setUser($this);
+        if (!$this->invoices->contains($invoice)) {
+            $this->invoices[] = $invoice;
+            $invoice->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeUserId(Invoice $userId): self
+    public function removeInvoice(Invoice $invoice): self
     {
-        if ($this->user_id->contains($userId)) {
-            $this->user_id->removeElement($userId);
+        if ($this->invoices->contains($invoice)) {
+            $this->invoices->removeElement($invoice);
             // set the owning side to null (unless already changed)
-            if ($userId->getUser() === $this) {
-                $userId->setUser(null);
+            if ($invoice->getUser() === $this) {
+                $invoice->setUser(null);
             }
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return (string) $this->getUsername();
     }
 }

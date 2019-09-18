@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Invoice;
+use App\Entity\Row;
 use App\Entity\User;
 use App\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,6 +29,7 @@ class UserController extends AbstractController
             'users' => $users,
         ]);
     }
+
 
     /**
      * @Route("/new", name="user_new", methods={"GET","POST"})
@@ -93,5 +96,45 @@ class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('user_index');
+    }
+
+    /**
+     * @Route("/profile/yourinvoices", name="user_your_invoices")
+     */
+    public function userInvoices(): Response
+    {
+
+        $id = $this->container->get('security.token_storage')->getToken()->getUser();
+
+        $user = $this->getDoctrine()
+            ->getRepository(User::class)
+            ->find($id->getId());
+
+        $invoice = $this->getDoctrine()
+            ->getRepository(Invoice::class)
+            ->findBy(['user' => $id->getId()]);
+
+        return $this->render('user/your_invoices.html.twig', [
+            'user' => $user,
+            'invoice' => $invoice
+        ]);
+    }
+
+    /**
+     * @Route("/profile/yourinvoices/{id}/", name="user_see_invoice")
+     */
+    public function seeInvoiceAction($id){
+        $invoice = $this->getDoctrine()
+            ->getRepository(Invoice::class)
+            ->findBy(['id' => $id]);
+
+        $row = $this->getDoctrine()
+            ->getRepository(Row::class)
+            ->findBy(['invoice' => $id]);
+
+        return $this->render('user/see_own_invoice.html.twig', [
+            'invoice' => $invoice,
+            'row' => $row
+        ]);
     }
 }

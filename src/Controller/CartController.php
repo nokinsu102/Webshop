@@ -2,16 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Invoice;
 use App\Entity\Product;
-use App\Entity\InvoiceProduct;
+use App\Entity\Row;
 use App\Entity\User;
-use App\Form\ProductType;
-use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 
 class CartController extends AbstractController
@@ -25,52 +24,55 @@ class CartController extends AbstractController
     }
 
     /**
-     * @Route("/cart", name="cart")
+     * @Route("/cart/", name="cart")
      */
-    public function index()
-    {
-        $getCart = $this->session->get('cart', []);
-        $this->session->get('cart', $getCart);
+    public function display(){
+        $cart = $this->session->get('cart', []);
 
         return $this->render('cart/index.html.twig', [
-            'cart' => $getCart
+            'cart' => $cart,
         ]);
     }
 
     /**
-     * @Route("/checkout", name="checkout", methods={"GET", "POST"})
+     * @Route("/checkout/", name="checkout")
      */
-    public function checkout(Product $product)
+    public function checkout()
     {
-        $session = $this->get('request_stack')->getCurrentRequest()->getSession();
-        $getCart = $session->get('cart', []);
-        // $products = $getCart[$product->getId()]['id'];
-        $amount = $getCart[$product->getId()]['amount'];
-        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $cart = $this->session->get('cart', []);
+        $total = 0;
+         foreach($cart as $id => $details)
+         {
+             $total = $total + ($cart[$id]['amount'] * $cart[$id]['price']);
+         }
+
+         $this->session->set('total', $total);
+        $entityManager = $this->getDoctrine()->getManager();
 
         $invoice = new Invoice();
         $invoice->setDate(new \DateTime());
-        $invoice->setPaid(true);
         $invoice->setPaidDate(new \DateTime());
-        $invoice->setUser($user);
+        $invoice->setPaid(true);
+        $invoice->setUser($this->getUser());
+        $invoice->setTotal($total);
 
-        foreach ($getCart as $id => $amount) {
+        foreach ($cart as $id => $quantity) 
+        {
             $row = new Row();
             $row->setInvoice($invoice);
-
-            $em = $this->getDoctrine()->getManager();
-            $product = $em->getRepository(Product::class)->find($id);
-
-            $row->setAmount($amount);
+            $row->setQuantity($quantity['amount']);
+            $product = $this->getDoctrine()->getManager()->getRepository(Product::class)->find($id);
             $row->setProduct($product);
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($row);
-            $entityManager->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($row);
+            $em->flush();
         }
 
-        $session->clear();
-        return $this->redirectToRoute('checkout');
+        $entityManager->persist($invoice);
+        $this->session->clear();
+        return $this->redirectToRoute('invoice_index', [
+
+        ]);
     }
 
 }

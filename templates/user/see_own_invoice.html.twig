@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Your Invoices{% endblock %}
+
+{% block body %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in row %}
+                <tr>
+                    <td>{{ row.product.name }}</td>
+                    <td>€{{ row.product.price }}</td>
+                    <td>{{ row.quantity }}</td>
+                    <td>€{{ row.quantity * row.product.price }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Invoice date</th>
+                <th scope="col">Payment date</th>
+                <th scope="col">Payment status</th>
+                <th scope="col">Total paid</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for invoice in invoice %}
+                <tr>
+                    <td scope="row">{{ invoice.date|date('d-m-Y') }}</td>
+                    <td>{{ invoice.paiddate|date('d-m-Y') }}</td>
+                    <td>{% if invoice.paid == 1 %}Paid{% else %}Not paid {% endif %}</td>
+                    <td>€{{ invoice.total }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

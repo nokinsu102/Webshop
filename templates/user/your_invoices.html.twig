@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Your Invoices{% endblock %}
+
+{% block body %}
+
+    Invoices for {{ user }}<br>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Invoice date</th>
+            <th scope="col">Payment date</th>
+            <th scope="col">Payment status</th>
+            <th scope="col">Total</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for invoice in invoice %}
+        <tr>
+            <td scope="row">{{ invoice.date|date('d-m-Y') }}</td>
+            <td>{{ invoice.paiddate|date('d-m-Y') }}</td>
+            <td>{% if invoice.paid == 1 %}Paid{% else %}Not paid {% endif %}</td>
+            <td>€{{ invoice.total }}</td>
+            <td><a href="{{ path('user_see_invoice', {id : invoice.id}) }}" class="btn btn-light pull-right" style="color:black!important">See invoice</a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

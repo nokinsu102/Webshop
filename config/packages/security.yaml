@@ -32,9 +32,7 @@ security:
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cart, role: ROLE_USER }
         - { path: ^/checkout, role: ROLE_USER }
-        - { path: ^/extra/, role: ROLE_ADMIN }
-        - { path: ^/image/, role: ROLE_ADMIN }
-        - { path: ^/organisation/, role: ROLE_ADMIN }
-        - { path: ^/room/, role: ROLE_ADMIN }
-        - { path: ^/type/, role: ROLE_ADMIN }
-        - { path: ^/user/, role: ROLE_ADMIN }
+        - { path: ^/product/, role: ROLE_ADMIN }
+        - { path: ^/category/, role: ROLE_ADMIN }
+        - { path: ^/invoice/, role: ROLE_ADMIN }
+        - { path: ^/taxcode/, role: ROLE_ADMIN }
