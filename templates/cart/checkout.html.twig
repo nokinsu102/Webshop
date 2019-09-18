@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block body %}
+<style>
+    .btn{
+        color:white!important;
+    }
+</style>
+  <div class="container" style="background:black;border:2px solid white;margin-top:50px;">
+  
+  {{ form(checkout_form) }}
+  </div>
+{% endblock %}

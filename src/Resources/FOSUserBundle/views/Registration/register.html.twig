@@ -1,0 +1,12 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% block fos_user_content %}
+<style>
+    html .btn{ 
+        color:black!important;
+    }
+</style>
+<div class="container">
+{% include "@FOSUser/Registration/register_content.html.twig" %}
+</div>
+{% endblock fos_user_content %}

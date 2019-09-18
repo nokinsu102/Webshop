@@ -1,0 +1,56 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<div class="fos_user_user_show">
+    {# <p>{{ 'profile.show.username'|trans }}: {{ user.username }}</p>
+    <p>{{ 'profile.show.email'|trans }}: {{ user.email }}</p> #}
+    <h1>Profile</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Username</th>
+                <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>Tel_nr</th>
+                <td>{{ user.telNr }}</td>
+            </tr>
+            <tr>
+                <th>Mobile_nr</th>
+                <td>{{ user.mobileNr }}</td>
+            </tr>
+            <tr>
+                <th>First_name</th>
+                <td>{{ user.firstName }}</td>
+            </tr>
+            <tr>
+                <th>Insertion_name</th>
+                <td>{{ user.insertionName }}</td>
+            </tr>
+            <tr>
+                <th>Last_name</th>
+                <td>{{ user.lastName }}</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>{{ user.address }}</td>
+            </tr>
+            <tr>
+                <th>Zip</th>
+                <td>{{ user.zip }}</td>
+            </tr>
+            <tr>
+                <th>City</th>
+                <td>{{ user.city }}</td>
+            </tr>
+            <tr>
+                <th>Country</th>
+                <td>{{ user.country }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
